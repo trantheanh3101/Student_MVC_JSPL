@@ -19,13 +19,46 @@ public class StudentControllers extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Student> students = studentService.findAll();
-        req.setAttribute("students", students);
-        req.getRequestDispatcher("/student/list.jsp").forward(req, resp);
+        String action = req.getParameter("action");
+        if (action == null) {
+            action = "";
+        }
+        switch (action) {
+            case "create":
+                req.getRequestDispatcher("/student/create.jsp").forward(req, resp);
+            default:
+                List<Student> students = studentService.findAll();
+                req.setAttribute("students", students);  // Điều này cho phép trang JSP truy cập vào danh sách sinh viên này thông qua đối tượng request.
+                req.getRequestDispatcher("/student/list.jsp").forward(req, resp); //  chuyển hướng yêu cầu từ servlet đến trang JSP
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+        req.setCharacterEncoding("UTF-8");
+        String action = req.getParameter("action");
+        if (action == null) {
+            action = "";
+        }
+        switch (action) {
+            case "create":
+                String name = req.getParameter("name");
+                String address = req.getParameter("address");
+                Float points = Float.parseFloat(req.getParameter("point"));
+                Student student = new Student(name,address,points);
+                studentService.save(student);
+                resp.sendRedirect("/student");
+            case "delete":
+                Long id = Long.parseLong(req.getParameter("id"));
+                Boolean isDelete = studentService.deleteById(id);
+                if (isDelete){
+                    resp.sendRedirect("/student");
+                } else {
+                    req.setAttribute("message","Xoa ko thanh cong");
+                    List<Student> students = studentService.findAll();
+                    req.setAttribute("students", students);
+                    req.getRequestDispatcher("/student/list.jsp").forward(req, resp);
+                }
+        }
     }
 }

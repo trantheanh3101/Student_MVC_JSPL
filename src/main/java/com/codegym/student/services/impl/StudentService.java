@@ -15,4 +15,14 @@ public class StudentService implements IStudentService {
     public List<Student> findAll() {
         return studentRepository.findAll();
     }
+
+    @Override
+    public void save(Student student) {
+        studentRepository.save(student);
+    }
+
+    @Override
+    public Boolean deleteById(Long id) {
+        return studentRepository.deleteById(id);
+    }
 }

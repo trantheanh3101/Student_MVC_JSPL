@@ -1,3 +1,4 @@
+
 <%--
   Created by IntelliJ IDEA.
   User: mac
@@ -31,7 +32,8 @@
     </div>
 </nav>
 <div class="container">
-    <button class="btn btn-primary mt-4">Thêm</button>
+    <p style="color: darkblue">${message}</p>
+    <button class="btn btn-primary mt-4" onclick="window.location.href='/student?action=create'">Thêm</button>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -54,11 +56,6 @@
                 <td>${student.address}</td>
                 <td>${student.point}</td>
                 <td>
-                        <%--                    <c:if test="${student.point >= 8}">Học sinh giỏi</c:if>--%>
-                        <%--                    <c:if test="${student.point >= 6.5 && student.point < 8}">Học sinh khá</c:if>--%>
-                        <%--                    <c:if test="${student.point >= 5 && student.point <6.5}">Học sinh trung bình</c:if>--%>
-                        <%--                    <c:if test="${student.point >= 3.5 && student.point < 5}">Học sinh yếu</c:if>--%>
-                        <%--                    <c:if test="${student.point < 3.5}">Cook</c:if>--%>
                     <c:choose>
                         <c:when test="${student.point >= 8}">Học sinh giỏi</c:when>
                         <c:when test="${student.point >= 6.5}">Học sinh khá</c:when>
@@ -83,7 +80,11 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                    <button type="button" class="btn btn-primary">Xác nhận</button>
+                                    <form action="/student?action=delete" method="post">
+                                        <button type="submit" class="btn btn-primary">Xác nhận</button>
+                                        <input type="hidden" name="id" value="${student.id}">
+                                    </form>
+
                                 </div>
                             </div>
                         </div>
