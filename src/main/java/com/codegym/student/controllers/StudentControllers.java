@@ -30,9 +30,8 @@ public class StudentControllers extends HttpServlet {
             case "edit":
                 long id = Long.parseLong(req.getParameter("id"));
                 Student student = studentService.findById(id);
-                RequestDispatcher dispatcher;
                 req.setAttribute("student", student);
-                dispatcher = req.getRequestDispatcher("/student/edit.jsp");
+                RequestDispatcher dispatcher = req.getRequestDispatcher("/student/edit.jsp");
                 try {
                     dispatcher.forward(req, resp);
                 } catch (ServletException | IOException e) {
