@@ -9,6 +9,7 @@ public class BaseRepository {
     private static String jdbcUsername = "root";
     private static String jdbcPassword = "Theanh31011998-pro";
     private static Connection connection = null;
+
     static {
         try {
             Class.forName("com.mysql.jdbc.Driver");

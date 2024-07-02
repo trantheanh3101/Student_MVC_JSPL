@@ -13,14 +13,13 @@ import java.util.List;
 public class StudentRepository implements IStudentRepository {
 
     private static List<Student> students;
-
-    static {
-        students = new ArrayList<>();
-        students.add(new Student(1L,"haiTT", "QN", 10.0f));
-        students.add(new Student(2L,"Bảo Ngọc", "HN", 8.0f));
-        students.add(new Student(3L,"Bảo Kỳ", "DN", 6.0f));
-        students.add(new Student(5L,"Cook", "Bàn ăn", 2f));
-    }
+//    static {
+//        students = new ArrayList<>();
+//        students.add(new Student(1L,"haiTT", "QN", 10.0f));
+//        students.add(new Student(2L,"Bảo Ngọc", "HN", 8.0f));
+//        students.add(new Student(3L,"Bảo Kỳ", "DN", 6.0f));
+//        students.add(new Student(5L,"Cook", "Bàn ăn", 2f));
+//    }
 
     @Override
     public List<Student> findAll() {
@@ -74,32 +73,54 @@ public class StudentRepository implements IStudentRepository {
     @Override
     public List<Student> findByName(String name) {
         List<Student> result = new ArrayList<>();
-        for (Student student : students) {
-            if (student.getName().contains(name)) {
-                result.add(student);
+        try {
+            PreparedStatement statement = BaseRepository.getConnection().prepareStatement("SELECT * FROM students WHERE name LIKE CONCAT('%'    ,?,'%')");
+            statement.setString(1, name);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                Long id = resultSet.getLong("id");
+                String nameS = resultSet.getString("name");
+                String address = resultSet.getString("address");
+                float point = resultSet.getFloat("point");
+                result.add(new Student(id,nameS,address,point));
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+
         return result;
     }
 
     @Override
     public Student findById(long id) {
-        for (Student student : students) {
-            if (student.getId().equals(id)) {
-                return student;
+        Student student = null;
+        try {
+            PreparedStatement statement = BaseRepository.getConnection().prepareStatement("SELECT * FROM students WHERE id=?");
+            statement.setLong(1,id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()){
+                String name = resultSet.getString("name");
+                String address = resultSet.getString("address");
+                Float point = resultSet.getFloat("point");
+                student = new Student(id, name, address, point);
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return null;
+        return student;
     }
 
     @Override
     public void update(long idEdit, Student studentEdit) {
-        for (Student student1 : students) {
-            if (student1.getId().equals(idEdit)) {
-                student1.setName(studentEdit.getName());
-                student1.setAddress(studentEdit.getAddress());
-                student1.setPoint(studentEdit.getPoint());
-            }
+        try {
+            PreparedStatement preparedStatement = BaseRepository.getConnection().prepareStatement("UPDATE students SET name=? ,address=?,point=? where id=?");
+            preparedStatement.setString(1,studentEdit.getName());
+            preparedStatement.setString(2, studentEdit.getAddress());
+            preparedStatement.setFloat(3,studentEdit.getPoint());
+            preparedStatement.setLong(4,idEdit);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }
