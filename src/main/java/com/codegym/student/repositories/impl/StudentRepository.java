@@ -3,6 +3,10 @@ package com.codegym.student.repositories.impl;
 import com.codegym.student.models.Student;
 import com.codegym.student.repositories.IStudentRepository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,25 +24,51 @@ public class StudentRepository implements IStudentRepository {
 
     @Override
     public List<Student> findAll() {
-//        List<Student> list = Collections.addAll(students);
+        List<Student> students = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = BaseRepository.getConnection().prepareStatement("select * from students");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            Long id;
+            String name;
+            String address;
+            Float point;
+            while (resultSet.next()){
+                id = resultSet.getLong("id");
+                name = resultSet.getString("name");
+                address = resultSet.getString("address");
+                point = resultSet.getFloat("point");
+                students.add(new Student(id,name,address,point));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return students;
     }
 
     @Override
     public void save(Student student) {
-        student.setId(students.get(students.size()-1).getId() + 1);
-        students.add(student);
+        try {
+            PreparedStatement preparedStatement = BaseRepository.getConnection().prepareStatement("insert into students(name,address,point) value (?,?,?)");
+            preparedStatement.setString(1, student.getName());
+            preparedStatement.setString(2, student.getAddress());
+            preparedStatement.setFloat(3, student.getPoint());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Boolean deleteById(Long id) {
-        for (Student student : students) {
-            if (student.getId().equals(id)) {
-                students.remove(student);
-                return true;
-            }
+        boolean isDelete;
+        try {
+            PreparedStatement statement = BaseRepository.getConnection().prepareStatement("delete from students where id=?;");
+            statement.setLong(1,id);
+            isDelete = statement.executeUpdate() > 0;
+        } catch (SQLException e){
+            throw new RuntimeException(e);
         }
-        return null;
+        return isDelete;
     }
 
     @Override
