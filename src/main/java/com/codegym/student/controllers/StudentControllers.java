@@ -4,6 +4,7 @@ import com.codegym.student.models.Student;
 import com.codegym.student.services.IStudentService;
 import com.codegym.student.services.impl.StudentService;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,6 +27,17 @@ public class StudentControllers extends HttpServlet {
         switch (action) {
             case "create":
                 req.getRequestDispatcher("/student/create.jsp").forward(req, resp);
+            case "edit":
+                long id = Long.parseLong(req.getParameter("id"));
+                Student student = studentService.findById(id);
+                RequestDispatcher dispatcher;
+                req.setAttribute("student", student);
+                dispatcher = req.getRequestDispatcher("/student/edit.jsp");
+                try {
+                    dispatcher.forward(req, resp);
+                } catch (ServletException | IOException e) {
+                    e.printStackTrace();
+                }
             default:
                 List<Student> students = studentService.findAll();
                 req.setAttribute("students", students);  // Điều này cho phép trang JSP truy cập vào danh sách sinh viên này thông qua đối tượng request.
@@ -46,17 +58,17 @@ public class StudentControllers extends HttpServlet {
                 String name = req.getParameter("name");
                 String address = req.getParameter("address");
                 Float points = Float.parseFloat(req.getParameter("point"));
-                Student student = new Student(name,address,points);
+                Student student = new Student(name, address, points);
                 studentService.save(student);
                 resp.sendRedirect("/student");
                 break;
             case "delete":
                 Long id = Long.parseLong(req.getParameter("id"));
                 Boolean isDelete = studentService.deleteById(id);
-                if (isDelete){
+                if (isDelete) {
                     resp.sendRedirect("/student");
                 } else {
-                    req.setAttribute("message","Xoa ko thanh cong");
+                    req.setAttribute("message", "Xoa ko thanh cong");
                     List<Student> students = studentService.findAll();
                     req.setAttribute("students", students);
                     req.getRequestDispatcher("/student/list.jsp").forward(req, resp);
@@ -64,10 +76,32 @@ public class StudentControllers extends HttpServlet {
                 break;
             case "search":
                 String search = req.getParameter("search");
-                List<Student> students = studentService.findByName(search);
-                req.setAttribute("students", students);
+                List<Student> studentSearch = studentService.findByName(search);
+                req.setAttribute("students", studentSearch);
                 req.getRequestDispatcher("/student/list.jsp").forward(req, resp);
                 break;
+            case "edit":
+                long idEdit = Long.parseLong(req.getParameter("id"));
+                String nameEdit = req.getParameter("name");
+                String addressEdit = req.getParameter("address");
+                Float point = Float.parseFloat(req.getParameter("point"));
+                Student studentEdit = studentService.findById(idEdit);
+                if (studentEdit != null) {
+                    studentEdit.setName(nameEdit);
+                    studentEdit.setAddress(addressEdit);
+                    studentEdit.setPoint(point);
+                    studentService.update(idEdit, studentEdit);
+                    req.setAttribute("student", studentEdit);
+                    req.setAttribute("message", "Cập nhật thành công");
+                    RequestDispatcher dispatcher = req.getRequestDispatcher("student/edit.jsp");
+                    try {
+                        dispatcher.forward(req, resp);
+                    } catch (ServletException | IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    req.setAttribute("message", "Sinh viên không tồn tại");
+                }
         }
     }
 }

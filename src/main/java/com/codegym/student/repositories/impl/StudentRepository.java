@@ -45,10 +45,31 @@ public class StudentRepository implements IStudentRepository {
     public List<Student> findByName(String name) {
         List<Student> result = new ArrayList<>();
         for (Student student : students) {
-            if (student.getName().equalsIgnoreCase(name)) {
+            if (student.getName().contains(name)) {
                 result.add(student);
             }
         }
         return result;
+    }
+
+    @Override
+    public Student findById(long id) {
+        for (Student student : students) {
+            if (student.getId().equals(id)) {
+                return student;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void update(long idEdit, Student studentEdit) {
+        for (Student student1 : students) {
+            if (student1.getId().equals(idEdit)) {
+                student1.setName(studentEdit.getName());
+                student1.setAddress(studentEdit.getAddress());
+                student1.setPoint(studentEdit.getPoint());
+            }
+        }
     }
 }

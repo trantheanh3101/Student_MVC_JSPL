@@ -12,4 +12,8 @@ public interface IStudentRepository {
     Boolean deleteById(Long id);
 
     List<Student> findByName(String name);
+
+    Student findById(long id);
+
+    void update(long idEdit, Student studentEdit);
 }

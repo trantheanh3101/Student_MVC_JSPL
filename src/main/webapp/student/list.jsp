@@ -39,7 +39,7 @@
 <div class="container">
     <p style="color: darkblue">${message}</p>
     <button class="btn btn-primary mt-4" onclick="window.location.href='/student?action=create'">Thêm</button>
-    <button class="btn btn-primary mt-4" onclick="window.location.href='/student?action=search'">SearchById</button>
+<%--    <button class="btn btn-primary mt-4" onclick="window.location.href='/student?action=search'">SearchById</button>--%>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -71,7 +71,7 @@
                     </c:choose>
                 </td>
                 <td>
-                    <button class="btn btn-warning">Sửa</button>
+                    <a href="/student?action=edit&id=${student.id}" class="btn btn-warning">edit</a>
                     <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal${student.id}">Xóa</button>
                     <div class="modal fade" id="deleteModal${student.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
