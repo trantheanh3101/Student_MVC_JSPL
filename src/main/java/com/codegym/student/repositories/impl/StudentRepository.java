@@ -40,4 +40,15 @@ public class StudentRepository implements IStudentRepository {
         }
         return null;
     }
+
+    @Override
+    public List<Student> findByName(String name) {
+        List<Student> result = new ArrayList<>();
+        for (Student student : students) {
+            if (student.getName().equalsIgnoreCase(name)) {
+                result.add(student);
+            }
+        }
+        return result;
+    }
 }

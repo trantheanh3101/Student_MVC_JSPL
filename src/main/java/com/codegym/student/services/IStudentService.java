@@ -10,4 +10,6 @@ public interface IStudentService {
     void save(Student student);
 
     Boolean deleteById(Long id);
+
+    List<Student> findByName(String name);
 }

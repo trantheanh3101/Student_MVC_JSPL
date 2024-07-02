@@ -30,6 +30,7 @@ public class StudentControllers extends HttpServlet {
                 List<Student> students = studentService.findAll();
                 req.setAttribute("students", students);  // Điều này cho phép trang JSP truy cập vào danh sách sinh viên này thông qua đối tượng request.
                 req.getRequestDispatcher("/student/list.jsp").forward(req, resp); //  chuyển hướng yêu cầu từ servlet đến trang JSP
+                break;
         }
     }
 
@@ -48,6 +49,7 @@ public class StudentControllers extends HttpServlet {
                 Student student = new Student(name,address,points);
                 studentService.save(student);
                 resp.sendRedirect("/student");
+                break;
             case "delete":
                 Long id = Long.parseLong(req.getParameter("id"));
                 Boolean isDelete = studentService.deleteById(id);
@@ -59,6 +61,13 @@ public class StudentControllers extends HttpServlet {
                     req.setAttribute("students", students);
                     req.getRequestDispatcher("/student/list.jsp").forward(req, resp);
                 }
+                break;
+            case "search":
+                String search = req.getParameter("search");
+                List<Student> students = studentService.findByName(search);
+                req.setAttribute("students", students);
+                req.getRequestDispatcher("/student/list.jsp").forward(req, resp);
+                break;
         }
     }
 }

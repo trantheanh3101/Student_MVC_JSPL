@@ -29,11 +29,17 @@
                 <a class="nav-link" href="/class">Lớp học</a>
             </div>
         </div>
+        <form class="d-flex" action="student" method="post">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+            <input type="hidden" name="action" value="search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
     </div>
 </nav>
 <div class="container">
     <p style="color: darkblue">${message}</p>
     <button class="btn btn-primary mt-4" onclick="window.location.href='/student?action=create'">Thêm</button>
+    <button class="btn btn-primary mt-4" onclick="window.location.href='/student?action=search'">SearchById</button>
     <table class="table table-hover">
         <thead>
         <tr>

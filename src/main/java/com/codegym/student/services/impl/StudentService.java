@@ -25,4 +25,10 @@ public class StudentService implements IStudentService {
     public Boolean deleteById(Long id) {
         return studentRepository.deleteById(id);
     }
+
+    @Override
+    public List<Student> findByName(String name) {
+        return studentRepository.findByName(name);
+    }
+
 }
