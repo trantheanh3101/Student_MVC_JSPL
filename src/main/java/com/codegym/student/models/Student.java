@@ -6,8 +6,17 @@ public class Student {
     private String name;
     private String address;
     private Float point;
+    private Long idClass;
 
     public Student() {
+    }
+
+    public Student(Long id, String name, String address, Float point, Long idClass) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.point = point;
+        this.idClass = idClass;
     }
 
     public Student(Long id, String name, String address, Float point) {
@@ -21,6 +30,24 @@ public class Student {
         this.name = name;
         this.address = address;
         this.point = point;
+    }
+
+    public Student(String name, String address, Float point, Long idClass) {
+        this.name = name;
+        this.address = address;
+        this.point = point;
+        this.idClass = idClass;
+    }
+
+    public Student(Long id, String nameS, String address, float point, Long idClass) {
+    }
+
+    public Long getIdClass() {
+        return idClass;
+    }
+
+    public void setIdClass(Long idClass) {
+        this.idClass = idClass;
     }
 
     public Long getId() {

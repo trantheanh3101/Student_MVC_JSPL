@@ -1,9 +1,9 @@
 package com.codegym.student.repositories.impl;
 
+import com.codegym.student.dto.StudentDTO;
 import com.codegym.student.models.Student;
 import com.codegym.student.repositories.IStudentRepository;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,21 +22,24 @@ public class StudentRepository implements IStudentRepository {
 //    }
 
     @Override
-    public List<Student> findAll() {
-        List<Student> students = new ArrayList<>();
+    public List<StudentDTO> findAll() {
+        List<StudentDTO> students = new ArrayList<>();
         try {
-            PreparedStatement preparedStatement = BaseRepository.getConnection().prepareStatement("select * from students");
+            PreparedStatement preparedStatement = BaseRepository.getConnection().
+                    prepareStatement("select id, students.name, address, point, c.name AS name_class from students join student.classroom c on c.id_class = students.id_class");
             ResultSet resultSet = preparedStatement.executeQuery();
             Long id;
             String name;
             String address;
             Float point;
+            String namClass;
             while (resultSet.next()){
                 id = resultSet.getLong("id");
                 name = resultSet.getString("name");
                 address = resultSet.getString("address");
                 point = resultSet.getFloat("point");
-                students.add(new Student(id,name,address,point));
+                namClass = resultSet.getString("name_class");
+                students.add(new StudentDTO(id,name,address,point,namClass));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -47,10 +50,12 @@ public class StudentRepository implements IStudentRepository {
     @Override
     public void save(Student student) {
         try {
-            PreparedStatement preparedStatement = BaseRepository.getConnection().prepareStatement("insert into students(name,address,point) value (?,?,?)");
+            PreparedStatement preparedStatement = BaseRepository.getConnection().
+                    prepareStatement("insert into students(name,address,point,id_class) value (?,?,?,?)");
             preparedStatement.setString(1, student.getName());
             preparedStatement.setString(2, student.getAddress());
             preparedStatement.setFloat(3, student.getPoint());
+            preparedStatement.setLong(4,student.getIdClass());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -63,7 +68,7 @@ public class StudentRepository implements IStudentRepository {
         try {
             PreparedStatement statement = BaseRepository.getConnection().prepareStatement("delete from students where id=?;");
             statement.setLong(1,id);
-            isDelete = statement.executeUpdate() > 0;
+            isDelete = statement.executeUpdate() > 0; //Thực thi câu lệnh SQL. Phương thức này trả về số hàng bị ảnh hưởng bởi câu lệnh SQL.
         } catch (SQLException e){
             throw new RuntimeException(e);
         }
@@ -71,10 +76,10 @@ public class StudentRepository implements IStudentRepository {
     }
 
     @Override
-    public List<Student> findByName(String name) {
-        List<Student> result = new ArrayList<>();
+    public List<StudentDTO> findByName(String name) {
+        List<StudentDTO> result = new ArrayList<>();
         try {
-            PreparedStatement statement = BaseRepository.getConnection().prepareStatement("SELECT * FROM students WHERE name LIKE CONCAT('%'    ,?,'%')");
+            PreparedStatement statement = BaseRepository.getConnection().prepareStatement("select id, students.name, address, point, c.name AS name_class from students join student.classroom c on c.id_class = students.id_class WHERE students.name LIKE CONCAT('%',?,'%')");
             statement.setString(1, name);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
@@ -82,7 +87,8 @@ public class StudentRepository implements IStudentRepository {
                 String nameS = resultSet.getString("name");
                 String address = resultSet.getString("address");
                 float point = resultSet.getFloat("point");
-                result.add(new Student(id,nameS,address,point));
+                String nameClass = resultSet.getString("name_class");
+                result.add(new StudentDTO(id,nameS,address,point,nameClass));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -92,17 +98,19 @@ public class StudentRepository implements IStudentRepository {
     }
 
     @Override
-    public Student findById(long id) {
-        Student student = null;
+    public StudentDTO findById(long id) {
+        StudentDTO student = null;
         try {
-            PreparedStatement statement = BaseRepository.getConnection().prepareStatement("SELECT * FROM students WHERE id=?");
+            PreparedStatement statement = BaseRepository.getConnection().
+                    prepareStatement("select id, students.name, address, point, c.name AS name_class from students join student.classroom c on c.id_class = students.id_class WHERE id=?");
             statement.setLong(1,id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()){
                 String name = resultSet.getString("name");
                 String address = resultSet.getString("address");
                 Float point = resultSet.getFloat("point");
-                student = new Student(id, name, address, point);
+                String nameClass = resultSet.getString("name_class");
+                student = new StudentDTO(id, name, address, point,nameClass);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -111,13 +119,14 @@ public class StudentRepository implements IStudentRepository {
     }
 
     @Override
-    public void update(long idEdit, Student studentEdit) {
+    public void update(long idEdit, StudentDTO studentEdit) {
         try {
-            PreparedStatement preparedStatement = BaseRepository.getConnection().prepareStatement("UPDATE students SET name=? ,address=?,point=? where id=?");
+            PreparedStatement preparedStatement = BaseRepository.getConnection().prepareStatement("UPDATE students SET name=?, address=?, point=?, id_class=(SELECT id_class FROM classroom WHERE name=?) WHERE id=?");
             preparedStatement.setString(1,studentEdit.getName());
             preparedStatement.setString(2, studentEdit.getAddress());
             preparedStatement.setFloat(3,studentEdit.getPoint());
-            preparedStatement.setLong(4,idEdit);
+            preparedStatement.setString(4, studentEdit.getNameClass());
+            preparedStatement.setLong(5,idEdit);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

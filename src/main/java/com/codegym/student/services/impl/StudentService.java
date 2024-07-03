@@ -1,5 +1,6 @@
 package com.codegym.student.services.impl;
 
+import com.codegym.student.dto.StudentDTO;
 import com.codegym.student.models.Student;
 import com.codegym.student.repositories.IStudentRepository;
 import com.codegym.student.repositories.impl.StudentRepository;
@@ -12,7 +13,7 @@ public class StudentService implements IStudentService {
     private static IStudentRepository studentRepository = new StudentRepository();
 
     @Override
-    public List<Student> findAll() {
+    public List<StudentDTO> findAll() {
         return studentRepository.findAll();
     }
 
@@ -27,17 +28,17 @@ public class StudentService implements IStudentService {
     }
 
     @Override
-    public List<Student> findByName(String name) {
+    public List<StudentDTO> findByName(String name) {
         return studentRepository.findByName(name);
     }
 
     @Override
-    public Student findById(long id) {
+    public StudentDTO findById(long id) {
         return studentRepository.findById(id);
     }
 
     @Override
-    public void update(long idEdit, Student studentEdit) {
+    public void update(long idEdit, StudentDTO studentEdit) {
         studentRepository.update(idEdit,studentEdit);
     }
 

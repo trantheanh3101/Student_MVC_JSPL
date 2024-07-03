@@ -1,19 +1,20 @@
 package com.codegym.student.repositories;
 
+import com.codegym.student.dto.StudentDTO;
 import com.codegym.student.models.Student;
 
 import java.util.List;
 
 public interface IStudentRepository {
-    List<Student> findAll();
+    List<StudentDTO> findAll();
 
     void save(Student student);
 
     Boolean deleteById(Long id);
 
-    List<Student> findByName(String name);
+    List<StudentDTO> findByName(String name);
 
-    Student findById(long id);
+    StudentDTO findById(long id);
 
-    void update(long idEdit, Student studentEdit);
+    void update(long idEdit, StudentDTO studentEdit);
 }

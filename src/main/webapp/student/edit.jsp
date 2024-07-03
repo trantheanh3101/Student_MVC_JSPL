@@ -50,6 +50,14 @@
             <label class="form-label" for="point">Điểm</label>
             <input class="form-control" id="point" name="point" min="0" max="10" value="${requestScope["student"].point}">
         </div>
+        <div class="mb-3">
+            <label class="form-label" for="classroom">Classroom</label>
+            <select id="classroom" name="classroom">
+                <c:forEach var="classroom" items="${classrooms}">
+                    <option value="${classroom.id}">${classroom.name}</option>
+                </c:forEach>
+            </select>
+        </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>

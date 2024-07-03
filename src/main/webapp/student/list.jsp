@@ -50,6 +50,7 @@
             <th>Mã</th>
             <th>Họ và tên</th>
             <th>Địa chỉ</th>
+            <th>Lơp</th>
             <th>Điểm</th>
             <th>Học lực</th>
             <th>Chức năng</th>
@@ -63,6 +64,7 @@
                 <td>${student.id}</td>
                 <td>${student.name}</td>
                 <td>${student.address}</td>
+                <td>${student.nameClass}</td>
                 <td>${student.point}</td>
                 <td>
                     <c:choose>
@@ -93,7 +95,6 @@
                                         <button type="submit" class="btn btn-primary">Xác nhận</button>
                                         <input type="hidden" name="id" value="${student.id}">
                                     </form>
-
                                 </div>
                             </div>
                         </div>
