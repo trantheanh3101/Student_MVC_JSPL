@@ -95,11 +95,13 @@ public class StudentControllers extends HttpServlet {
                 String nameEdit = req.getParameter("name");
                 String addressEdit = req.getParameter("address");
                 Float point = Float.parseFloat(req.getParameter("point"));
+                Long idClassEdit = Long.parseLong(req.getParameter("classroom"));
                 StudentDTO studentEdit = studentService.findById(idEdit);
                 if (studentEdit != null) {
                     studentEdit.setName(nameEdit);
                     studentEdit.setAddress(addressEdit);
                     studentEdit.setPoint(point);
+                    studentEdit.setIdClass(idClassEdit);
                     studentService.update(idEdit, studentEdit);
                     req.setAttribute("student", studentEdit);
                     req.setAttribute("message", "Cập nhật thành công");

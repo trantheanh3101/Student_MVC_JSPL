@@ -6,6 +6,7 @@ public class StudentDTO {
     private String address;
     private Float point;
     private String nameClass;
+    private Long idClass;
 
     public StudentDTO() {
     }
@@ -16,6 +17,23 @@ public class StudentDTO {
         this.address = address;
         this.point = point;
         this.nameClass = nameClass;
+    }
+
+    public StudentDTO(Long id, String name, String address, Float point, String nameClass, Long idClass) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.point = point;
+        this.nameClass = nameClass;
+        this.idClass = idClass;
+    }
+
+    public Long getIdClass() {
+        return idClass;
+    }
+
+    public void setIdClass(Long idClass) {
+        this.idClass = idClass;
     }
 
     public Long getId() {

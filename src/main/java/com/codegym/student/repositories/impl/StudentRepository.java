@@ -121,11 +121,11 @@ public class StudentRepository implements IStudentRepository {
     @Override
     public void update(long idEdit, StudentDTO studentEdit) {
         try {
-            PreparedStatement preparedStatement = BaseRepository.getConnection().prepareStatement("UPDATE students SET name=?, address=?, point=?, id_class=(SELECT id_class FROM classroom WHERE name=?) WHERE id=?");
+            PreparedStatement preparedStatement = BaseRepository.getConnection().prepareStatement("UPDATE students SET name=?, address=?, point=?, id_class=? WHERE id=?");
             preparedStatement.setString(1,studentEdit.getName());
             preparedStatement.setString(2, studentEdit.getAddress());
             preparedStatement.setFloat(3,studentEdit.getPoint());
-            preparedStatement.setString(4, studentEdit.getNameClass());
+            preparedStatement.setLong(4,studentEdit.getIdClass());
             preparedStatement.setLong(5,idEdit);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
