@@ -31,6 +31,11 @@
         </div>
     </div>
 </nav>
+<p>
+    <c:if test='${requestScope["message"] != null}'>
+        <span class="message">${requestScope["message"]}</span>
+    </c:if>
+</p>
 <div class="container">
     <form method="post">
         <div class="mb-3">
@@ -42,7 +47,7 @@
             <input type="text" class="form-control" id="address" name="address" required value="${requestScope["student"].address}">
         </div>
         <div class="mb-3">
-            <label class="form-label" for="point">Điẻm</label>
+            <label class="form-label" for="point">Điểm</label>
             <input class="form-control" id="point" name="point" min="0" max="10" value="${requestScope["student"].point}">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>

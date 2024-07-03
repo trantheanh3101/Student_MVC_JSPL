@@ -93,13 +93,16 @@ public class StudentControllers extends HttpServlet {
                     req.setAttribute("student", studentEdit);
                     req.setAttribute("message", "Cập nhật thành công");
                     RequestDispatcher dispatcher = req.getRequestDispatcher("student/edit.jsp");
+                    dispatcher.forward(req, resp);
+//                    resp.sendRedirect("/student");
+                } else {
+                    req.setAttribute("message", "Sinh viên không tồn tại");
+                    RequestDispatcher dispatcher = req.getRequestDispatcher("student/edit.jsp");
                     try {
                         dispatcher.forward(req, resp);
                     } catch (ServletException | IOException e) {
                         e.printStackTrace();
                     }
-                } else {
-                    req.setAttribute("message", "Sinh viên không tồn tại");
                 }
         }
     }

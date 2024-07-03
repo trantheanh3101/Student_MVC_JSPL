@@ -37,9 +37,12 @@
     </div>
 </nav>
 <div class="container">
-    <p style="color: darkblue">${message}</p>
+    <p>
+        <c:if test='${requestScope["message"] != null}'>
+            <span class="message">${requestScope["message"]}</span>
+        </c:if>
+    </p>
     <button class="btn btn-primary mt-4" onclick="window.location.href='/student?action=create'">Thêm</button>
-<%--    <button class="btn btn-primary mt-4" onclick="window.location.href='/student?action=search'">SearchById</button>--%>
     <table class="table table-hover">
         <thead>
         <tr>
