@@ -67,10 +67,11 @@ public class StudentControllers extends HttpServlet {
                 if (isDelete) {
                     resp.sendRedirect("/student");
                 } else {
-                    req.setAttribute("message", "Xoa ko thanh cong");
                     List<Student> students = studentService.findAll();
                     req.setAttribute("students", students);
-                    req.getRequestDispatcher("/student/list.jsp").forward(req, resp);
+                    req.setAttribute("message", "Xoa ko thanh cong");
+                    RequestDispatcher dispatcher = req.getRequestDispatcher("student/list.jsp");
+                    dispatcher.forward(req, resp);
                 }
                 break;
             case "search":
@@ -94,7 +95,6 @@ public class StudentControllers extends HttpServlet {
                     req.setAttribute("message", "Cập nhật thành công");
                     RequestDispatcher dispatcher = req.getRequestDispatcher("student/edit.jsp");
                     dispatcher.forward(req, resp);
-//                    resp.sendRedirect("/student");
                 } else {
                     req.setAttribute("message", "Sinh viên không tồn tại");
                     RequestDispatcher dispatcher = req.getRequestDispatcher("student/edit.jsp");

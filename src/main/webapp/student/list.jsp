@@ -36,12 +36,12 @@
         </form>
     </div>
 </nav>
+<p>
+    <c:if test='${requestScope["message"] != null}'>
+        <span class="message">${requestScope["message"]}</span>
+    </c:if>
+</p>
 <div class="container">
-    <p>
-        <c:if test='${requestScope["message"] != null}'>
-            <span class="message">${requestScope["message"]}</span>
-        </c:if>
-    </p>
     <button class="btn btn-primary mt-4" onclick="window.location.href='/student?action=create'">Thêm</button>
     <table class="table table-hover">
         <thead>
